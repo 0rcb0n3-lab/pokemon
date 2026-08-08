@@ -88,13 +88,22 @@ def show_pokemon(request, pokemon_id):
 
     img_url = request.build_absolute_uri(pokemon.image.url) if pokemon.image else None
 
+    previous_evolution_info = None
+    if pokemon.previous_evolution:
+        previous_evolution_info = {
+            'pokemon_id': pokemon.previous_evolution.id,
+            'img_url': request.build_absolute_uri(pokemon.previous_evolution.image.url) if pokemon.previous_evolution.image else None,
+            'title_ru': pokemon.previous_evolution.title,
+        }
+
     pokemon_on_page = {
         'pokemon_id': pokemon.id,
         'img_url': img_url,
         'title_ru': pokemon.title,
-        'title_en' : pokemon.title_en,
+        'title_en': pokemon.title_en,
         'title_jp': pokemon.title_jp,
-        'description' :pokemon.description,
+        'description': pokemon.description,
+        'previous_evolution': previous_evolution_info
     }
 
     return render(request, 'pokemon.html', context={
