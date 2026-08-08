@@ -96,6 +96,17 @@ def show_pokemon(request, pokemon_id):
             'title_ru': pokemon.previous_evolution.title,
         }
 
+    next_evolutions = pokemon.next_evolutions.all()
+
+    next_evolution_info = None
+    if next_evolutions:
+        next_evolution = next_evolutions[0]
+        next_evolution_info = {
+            'pokemon_id': next_evolution.id,
+            'img_url': request.build_absolute_uri(next_evolution.image.url) if next_evolution.image else None,
+            'title_ru': next_evolution.title,
+        }
+
     pokemon_on_page = {
         'pokemon_id': pokemon.id,
         'img_url': img_url,
@@ -103,7 +114,8 @@ def show_pokemon(request, pokemon_id):
         'title_en': pokemon.title_en,
         'title_jp': pokemon.title_jp,
         'description': pokemon.description,
-        'previous_evolution': previous_evolution_info
+        'previous_evolution': previous_evolution_info,
+        'next_evolution': next_evolution_info,
     }
 
     return render(request, 'pokemon.html', context={
